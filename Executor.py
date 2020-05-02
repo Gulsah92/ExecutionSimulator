@@ -17,13 +17,16 @@ binaries = BinReader.Binary('test.bin').binl
 regs = {'0000000000000001' : 'a', '0000000000000010' : 'b', '0000000000000011' : 'c', '0000000000000100' : 'd',
         '0000000000000101' : 'e', '0000000000000110' : 's', '0000000000000000' : 'pc'}
 
-#Load instructions and data to memory
+#Load instructions and data to memory starting from low address
+ind = 0
 for inst in binaries:
-    mem.set2mem(inst,binaries.index(inst))
+    mem.set2mem(inst, ind)
+    ind = ind + 1
 
 #Run instructions using PC and memory
 IsRunning = True
 while IsRunning:
+    # print(mem.get(cpu.pc))
     # Halt op
     if mem.get(cpu.pc)[0] == '000001':
         IsRunning = False
@@ -59,6 +62,21 @@ while IsRunning:
                 dec_asc_1 = int(bin_asc[:8], 2)
                 print(chr(dec_asc_1) + chr(dec_asc_2))
                 cpu.pc = cpu.pc + 1
+    # ADD op
+    elif  mem.get(cpu.pc)[0] == '000100':
+        # Immediate addressing
+        if mem.get(cpu.pc)[1] == '00':
+            op_dec_value = int(mem.get(cpu.pc)[2], 2)
+            a_dec_value = int(cpu.a, 2)
+            a_dec_value = op_dec_value + a_dec_value
+            cpu.a = bin(a_dec_value)[2:].zfill(16)
+            cpu.pc = cpu.pc + 1
+            if a_dec_value == 0:
+                cpu.zf = True
+            if a_dec_value < 0:
+                cpu.sf = True
+            if a_dec_value > 65535:
+                cpu.cf = True
 
         # {'HALT': '000001', 'LOAD': '000010', 'STORE': '000011', 'ADD': '000100', 'SUB': '000101', 'INC': '000110',
         #  'DEC': '000110', 'MUL': '001000', 'DIV': '001001', 'XOR': '001010', 'AND': '001011', 'OR': '001100',

@@ -2,6 +2,7 @@
 #Register
 #PC
 
+
 class cpu:
     zf = False
     cf = False
@@ -42,6 +43,7 @@ class cpu:
         else:
             print('Invalid registry!')
 
+    # Get value at given register
     def get(self, register):
         if register == 'zf':
             return self.zf
