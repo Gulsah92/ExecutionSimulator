@@ -7,9 +7,8 @@ class Memory:
     def __str__(self):
         return str(self.mem)
 
-    def set2mem (self,data,ind):
+    def set2mem(self, data, ind):
         self.mem[ind] = data
 
-mymem = Memory()
-mymem.set2mem('gulsah',5)
-print(mymem)
+    def get(self, index):
+        return self.mem[index]
