@@ -413,7 +413,7 @@ while IsRunning:
             cp.s = cp.s - 1
 
     # Pop op
-    elif mem.get(cp.pc)[0] == '010001':
+    elif mem.get(cp.pc)[0] == '010010':
 
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
@@ -496,6 +496,65 @@ while IsRunning:
                 cp.zf = False
                 cp.cf = True
             cp.pc = cp.pc + 1
+
+
+    # JMP op
+    elif mem.get(cp.pc)[0] == '010100':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            cp.pc = bin2dec(mem.get(cp.pc)[2])
+
+    # JZ op
+    elif mem.get(cp.pc)[0] == '010101':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if cp.zf:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
+    # JNZ op
+    elif mem.get(cp.pc)[0] == '010110':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if not cp.zf:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
+    # JC op
+    elif mem.get(cp.pc)[0] == '010101':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if cp.cf:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
+    # JNC op
+    elif mem.get(cp.pc)[0] == '010101':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if not cp.cf:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
+    # JA op
+    elif mem.get(cp.pc)[0] == '011001':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if not cp.cf:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
 
         # {'HALT': '000001', 'LOAD': '000010', 'STORE': '000011', 'ADD': '000100', 'SUB': '000101', 'INC': '000110',
         #  'DEC': '000110', 'MUL': '001000', 'DIV': '001001', 'XOR': '001010', 'AND': '001011', 'OR': '001100',
