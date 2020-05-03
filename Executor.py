@@ -58,9 +58,6 @@ while IsRunning:
 
     # Load op
     elif mem.get(cp.pc)[0] == '000010':
-        # print('LOAD')
-        # print(cp)
-        # print(mem.get(cp.pc)[2])
 
         # immediate addressing
         if mem.get(cp.pc)[1] == '00':
@@ -194,7 +191,7 @@ while IsRunning:
         if mem.get(cp.pc)[1] == '00':
             op_dec_value = bin2dec(mem.get(cp.pc)[2])
             a_dec_value = bin2dec(cp.a)
-            a_dec_value = op_dec_value - a_dec_value
+            a_dec_value = a_dec_value - op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
@@ -203,7 +200,7 @@ while IsRunning:
         elif mem.get(cp.pc)[1] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
             a_dec_value = int(cp.a, 2)
-            a_dec_value = op_dec_value - a_dec_value
+            a_dec_value = a_dec_value - op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
@@ -212,7 +209,7 @@ while IsRunning:
         elif mem.get(cp.pc)[1] == '10':
             op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
             a_dec_value = int(cp.a, 2)
-            a_dec_value = op_dec_value - a_dec_value
+            a_dec_value = a_dec_value - op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
@@ -221,7 +218,7 @@ while IsRunning:
         elif mem.get(cp.pc)[1] == '11':
             op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
             a_dec_value = int(cp.a, 2)
-            a_dec_value = op_dec_value - a_dec_value
+            a_dec_value = a_dec_value - op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
@@ -301,7 +298,7 @@ while IsRunning:
         if mem.get(cp.pc)[1] == '00':
             op_dec_value = bin2dec(mem.get(cp.pc)[2])
             a_dec_value = bin2dec(cp.a)
-            a_dec_value = op_dec_value // a_dec_value
+            a_dec_value = a_dec_value // op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
@@ -310,7 +307,7 @@ while IsRunning:
         elif mem.get(cp.pc)[1] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
             a_dec_value = int(cp.a, 2)
-            a_dec_value = op_dec_value // a_dec_value
+            a_dec_value = a_dec_value // op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_zf_sf(a_dec_value)
@@ -319,7 +316,7 @@ while IsRunning:
         elif mem.get(cp.pc)[1] == '10':
             op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
             a_dec_value = int(cp.a, 2)
-            a_dec_value = op_dec_value // a_dec_value
+            a_dec_value = a_dec_value // op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_zf_sf(a_dec_value)
@@ -328,7 +325,7 @@ while IsRunning:
         elif mem.get(cp.pc)[1] == '11':
             op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
             a_dec_value = int(cp.a, 2)
-            a_dec_value = op_dec_value // a_dec_value
+            a_dec_value = a_dec_value // op_dec_value
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_zf_sf(a_dec_value)
@@ -708,7 +705,7 @@ while IsRunning:
             while get_char:
                 r_char = input()
                 try:
-                    chr(r_char).decode('ascii')
+                    # chr(r_char).decode(int(r_char))
                     bin_char = bin(ord(r_char))[2:].zfill(16)
                     get_char = False
                 except UnicodeDecodeError:
@@ -722,8 +719,8 @@ while IsRunning:
             while get_char:
                 r_char = input()
                 try:
-                    chr(r_char).decode('ascii')
-                    bin_char = bin(ord(r_char))[2:].zfill(16)
+                    # chr(r_char).decode(int(r_char))
+                    bin_char = bin(ord(chr(r_char)))[2:]  # .zfill(16)
                     get_char = False
                 except UnicodeDecodeError:
                     print('Enter an ASCII character!')
@@ -736,7 +733,7 @@ while IsRunning:
             while get_char:
                 r_char = input()
                 try:
-                    chr(r_char).decode('ascii')
+                    # chr(r_char).decode(int(r_char))
                     bin_char = bin(ord(r_char))[2:].zfill(16)
                     get_char = False
                 except UnicodeDecodeError:
@@ -747,9 +744,6 @@ while IsRunning:
     # If Label
     elif mem.get(cp.pc)[0] == '111111':
         cp.pc = cp.pc + 1
-
-
-
 
         # {'HALT': '000001', 'LOAD': '000010', 'STORE': '000011', 'ADD': '000100', 'SUB': '000101', 'INC': '000110',
         #  'DEC': '000110', 'MUL': '001000', 'DIV': '001001', 'XOR': '001010', 'AND': '001011', 'OR': '001100',
