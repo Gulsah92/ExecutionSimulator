@@ -555,6 +555,86 @@ while IsRunning:
             else:
                 cp.pc = cp.pc + 1
 
+    # JAE op
+    elif mem.get(cp.pc)[0] == '100000':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if cp.cf ^ cp.zf:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
+    # JB op
+    elif mem.get(cp.pc)[0] == '100001':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if cp.cf == False and cp.zf == False:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
+    # JBE op
+    elif mem.get(cp.pc)[0] == '100010':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            if cp.cf == False and cp.zf == False:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            elif cp.cf == False and cp.zf == True:
+                cp.pc = bin2dec(mem.get(cp.pc)[2])
+            else:
+                cp.pc = cp.pc + 1
+
+    # READ
+    elif mem.get(cp.pc)[0] == '100011':
+
+        # Register addressing
+        if mem.get(cp.pc)[1] == '01':
+            get_char = True
+            while get_char:
+                r_char = input()
+                try:
+                    chr(r_char).decode('ascii')
+                    bin_char = bin(ord(r_char))[2:].zfill(16)
+                    get_char = False
+                except UnicodeDecodeError:
+                    print('Enter an ASCII character!')
+            cp.set(regs[mem.get(cp.pc)[2]], bin_char)
+            cp.pc = cp.pc + 1
+
+        # Indirect memory addressing
+        if mem.get(cp.pc)[1] == '01':
+            get_char = True
+            while get_char:
+                r_char = input()
+                try:
+                    chr(r_char).decode('ascii')
+                    bin_char = bin(ord(r_char))[2:].zfill(16)
+                    get_char = False
+                except UnicodeDecodeError:
+                    print('Enter an ASCII character!')
+            mem.set(bin_char, bin2dec(cp.get(regs[mem.get(cp.pc)[2]])))
+            cp.pc = cp.pc + 1
+
+        # Direct memory addressing
+        if mem.get(cp.pc)[1] == '01':
+            get_char = True
+            while get_char:
+                r_char = input()
+                try:
+                    chr(r_char).decode('ascii')
+                    bin_char = bin(ord(r_char))[2:].zfill(16)
+                    get_char = False
+                except UnicodeDecodeError:
+                    print('Enter an ASCII character!')
+            mem.set(bin_char, bin2dec(bin2dec(mem.get(cp.pc)[2])))
+            cp.pc = cp.pc + 1
+
+
+
+
 
         # {'HALT': '000001', 'LOAD': '000010', 'STORE': '000011', 'ADD': '000100', 'SUB': '000101', 'INC': '000110',
         #  'DEC': '000110', 'MUL': '001000', 'DIV': '001001', 'XOR': '001010', 'AND': '001011', 'OR': '001100',
