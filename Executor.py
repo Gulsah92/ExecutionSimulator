@@ -528,10 +528,10 @@ while IsRunning:
 
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
+            cp.s = cp.s + 1
             data = mem.get(cp.s)
             cp.set(regs[mem.get(cp.pc)[2]], data)
             cp.pc = cp.pc + 1
-            cp.s = cp.s + 1
 
     # CMP op
     elif mem.get(cp.pc)[0] == '010011':
