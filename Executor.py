@@ -235,6 +235,10 @@ while IsRunning:
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
+            print('mul')
+            print(op_dec_value)
+            print(a_dec_value)
+            print(cp.a)
 
         # Register addressing
         elif mem.get(cp.pc)[1] == '01':
@@ -525,7 +529,7 @@ while IsRunning:
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
             data = mem.get(cp.s)
-            cp.a = data
+            cp.set(regs[mem.get(cp.pc)[2]], data)
             cp.pc = cp.pc + 1
             cp.s = cp.s + 1
 
