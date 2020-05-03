@@ -378,15 +378,18 @@ while IsRunning:
 
     # SHL op
     elif mem.get(cp.pc)[0] == '001110':
+
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
             sh_op = bin(op_dec_value << 1)[2:].zfill(16)
             cp.set(cp.get(regs[mem.get(cp.pc)[2]]), sh_op)
             cp.pc = cp.pc + 1
-            set_zf_sf(a_dec_value)
+            set_all_flags(a_dec_value)
+
     # SHR op
     elif mem.get(cp.pc)[0] == '001111':
+
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
@@ -399,14 +402,105 @@ while IsRunning:
     elif mem.get(cp.pc)[0] == '010000':
         cp.pc = cp.pc + 1
 
+    # PUSH op
+    elif mem.get(cp.pc)[0] == '010001':
 
+        # Register addressing
+        if mem.get(cp.pc)[1] == '01':
+            data = cp.get(regs[mem.get(cp.pc)[2]])
+            mem.set(data, cp.s)
+            cp.pc = cp.pc + 1
+            cp.s = cp.s - 1
 
+    # Pop op
+    elif mem.get(cp.pc)[0] == '010001':
 
+        # Register addressing
+        if mem.get(cp.pc)[1] == '01':
+            data = mem.get(cp.s)
+            cp.a = data
+            cp.pc = cp.pc + 1
+            cp.s = cp.s + 1
 
+    # CMP op
+    elif mem.get(cp.pc)[0] == '010011':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            dec_op = bin2dec(mem.get(cp.pc)[2])
+            dec_a = bin2dec(cp.a)
+            if dec_op < dec_a:
+                cp.sf = False
+                cp.zf = False
+                cp.cf = False
+            elif dec_op == dec_a:
+                cp.sf = False
+                cp.zf = True
+                cp.cf = False
+            elif dec_op > dec_a:
+                cp.sf = True
+                cp.zf = False
+                cp.cf = True
+            cp.pc = cp.pc + 1
+
+        # Register addressing
+        elif mem.get(cp.pc)[1] == '00':
+            dec_op = bin2dec(cp.get(regs[(mem.get(cp.pc)[2])]))
+            dec_a = bin2dec(cp.a)
+            if dec_op < dec_a:
+                cp.sf = False
+                cp.zf = False
+                cp.cf = False
+            elif dec_op == dec_a:
+                cp.sf = False
+                cp.zf = True
+                cp.cf = False
+            elif dec_op > dec_a:
+                cp.sf = True
+                cp.zf = False
+                cp.cf = True
+            cp.pc = cp.pc + 1
+
+        # Indirect memory addressing
+        elif mem.get(cp.pc)[1] == '00':
+            dec_op = bin2dec(mem.get(bin2dec(cp.get(regs[(mem.get(cp.pc)[2])]))))
+            dec_a = bin2dec(cp.a)
+            if dec_op < dec_a:
+                cp.sf = False
+                cp.zf = False
+                cp.cf = False
+            elif dec_op == dec_a:
+                cp.sf = False
+                cp.zf = True
+                cp.cf = False
+            elif dec_op > dec_a:
+                cp.sf = True
+                cp.zf = False
+                cp.cf = True
+            cp.pc = cp.pc + 1
+
+        # Direct memory addressing
+        elif mem.get(cp.pc)[1] == '00':
+            dec_op = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
+            dec_a = bin2dec(cp.a)
+            if dec_op < dec_a:
+                cp.sf = False
+                cp.zf = False
+                cp.cf = False
+            elif dec_op == dec_a:
+                cp.sf = False
+                cp.zf = True
+                cp.cf = False
+            elif dec_op > dec_a:
+                cp.sf = True
+                cp.zf = False
+                cp.cf = True
+            cp.pc = cp.pc + 1
 
         # {'HALT': '000001', 'LOAD': '000010', 'STORE': '000011', 'ADD': '000100', 'SUB': '000101', 'INC': '000110',
         #  'DEC': '000110', 'MUL': '001000', 'DIV': '001001', 'XOR': '001010', 'AND': '001011', 'OR': '001100',
         #  'NOT': '001101', 'SHL': '001110', 'SHR': '001111', 'NOP': '010000', 'PUSH': '010001', 'POP': '010010',
+
         #  'CMP': '010011', 'JMP': '010100', 'JZ': '010101', 'JE': '010101', 'JNZ': '010110', 'JNE': '010110',
         #  'JC': '010111', 'JNC': '011000', 'JA': '011001', 'JAE': '100000', 'JB': '100001', 'JBE': '100010',
         #  'READ': '100011', 'PRINT': '100100'}

@@ -13,7 +13,7 @@ class cpu:
     c = 0
     d = 0
     e = 0
-    s = 0
+    s = (2**16) - 1
 
     def __str__(self):
         return 'zf=' + str(self.zf) + '\ncf=' + str(self.cf) + '\nsf=' + str(self.sf) + '\npc=' + str(self.pc) + '\na=' + str(self.a) +  '\nb=' + str(self.b) +  '\nc=' + str(self.c) + '\nd=' + str(self.d) + '\ne=' + str(self.e) + '\ns=' + str(self.s)
