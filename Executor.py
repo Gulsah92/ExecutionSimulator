@@ -58,6 +58,7 @@ while IsRunning:
 
     # Load op
     elif mem.get(cp.pc)[0] == '000010':
+
         # immediate addressing
         if mem.get(cp.pc)[1] == '00':
             # print(mem.get(cp.pc)[2])
@@ -83,6 +84,7 @@ while IsRunning:
 
     # Store op
     elif mem.get(cp.pc)[0] == '000011':
+
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
             cp.set(regs[mem.get(cp.pc)[2]], cp.get('a'))
@@ -131,6 +133,7 @@ while IsRunning:
             else:
                 print(chr(bin2dec(bin_asc[8:])) + chr(bin2dec(bin_asc[:8])))
                 cp.pc = cp.pc + 1
+
         # Direct memory
         elif mem.get(cp.pc)[1] == '11':
             bin_asc = mem.get(bin2dec(mem.get(cp.pc)[2]))
@@ -142,6 +145,7 @@ while IsRunning:
                 cp.pc = cp.pc + 1
     # ADD op
     elif mem.get(cp.pc)[0] == '000100':
+
         # Immediate addressing
         if mem.get(cp.pc)[1] == '00':
             op_dec_value = bin2dec(mem.get(cp.pc)[2])
@@ -150,6 +154,7 @@ while IsRunning:
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
+
         # Register addressing
         elif mem.get(cp.pc)[1] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
@@ -158,6 +163,7 @@ while IsRunning:
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
+
         # Indirect memory
         elif mem.get(cp.pc)[1] == '10':
             op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
@@ -166,6 +172,7 @@ while IsRunning:
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
+
         # Direct memory
         elif mem.get(cp.pc)[1] == '11':
             op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
@@ -174,6 +181,227 @@ while IsRunning:
             cp.a = bin(a_dec_value)[2:].zfill(16)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
+
+    # Todo: GULSAH sub, mul, inc, dec instructions
+
+    # DIV op
+    elif mem.get(cp.pc)[0] == '001001':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            op_dec_value = bin2dec(mem.get(cp.pc)[2])
+            a_dec_value = bin2dec(cp.a)
+            a_dec_value = op_dec_value // a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_all_flags(a_dec_value)
+
+        # Register addressing
+        elif mem.get(cp.pc)[1] == '01':
+            op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value // a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Indirect memory
+        elif mem.get(cp.pc)[1] == '10':
+            op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value // a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Direct memory
+        elif mem.get(cp.pc)[1] == '11':
+            op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value // a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+    # XOR op
+    elif mem.get(cp.pc)[0] == '001010':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            op_dec_value = bin2dec(mem.get(cp.pc)[2])
+            a_dec_value = bin2dec(cp.a)
+            a_dec_value = op_dec_value ^ a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Register addressing
+        elif mem.get(cp.pc)[1] == '01':
+            op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value ^ a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Indirect memory
+        elif mem.get(cp.pc)[1] == '10':
+            op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value ^ a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Direct memory
+        elif mem.get(cp.pc)[1] == '11':
+            op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value ^ a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+    # AND op
+    elif mem.get(cp.pc)[0] == '001011':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            op_dec_value = bin2dec(mem.get(cp.pc)[2])
+            a_dec_value = bin2dec(cp.a)
+            a_dec_value = op_dec_value & a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Register addressing
+        elif mem.get(cp.pc)[1] == '01':
+            op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value & a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Indirect memory
+        elif mem.get(cp.pc)[1] == '10':
+            op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value & a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Direct memory
+        elif mem.get(cp.pc)[1] == '11':
+            op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value & a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+    # OR op
+    elif mem.get(cp.pc)[0] == '001100':
+
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            op_dec_value = bin2dec(mem.get(cp.pc)[2])
+            a_dec_value = bin2dec(cp.a)
+            a_dec_value = op_dec_value | a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Register addressing
+        elif mem.get(cp.pc)[1] == '01':
+            op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value | a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Indirect memory
+        elif mem.get(cp.pc)[1] == '10':
+            op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value | a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Direct memory
+        elif mem.get(cp.pc)[1] == '11':
+            op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
+            a_dec_value = int(cp.a, 2)
+            a_dec_value = op_dec_value | a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+    # NOT op
+    elif mem.get(cp.pc)[0] == '001101':
+
+        # !!!! Burası cok saçma bunu hocaya sormalı
+        # Immediate addressing
+        if mem.get(cp.pc)[1] == '00':
+            op_dec_value = bin2dec(mem.get(cp.pc)[2])
+            a_dec_value = bin2dec(cp.a)
+            a_dec_value = ~a_dec_value
+            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Register addressing
+        elif mem.get(cp.pc)[1] == '01':
+            op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
+            not_op = bin(~op_dec_value)[2:].zfill(16)
+            cp.set(cp.get(regs[mem.get(cp.pc)[2]]), not_op)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Indirect memory
+        elif mem.get(cp.pc)[1] == '10':
+            op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
+            not_op = bin(~op_dec_value)[2:].zfill(16)
+            mem.set(not_op, bin2dec(cp.get(regs[mem.get(cp.pc)[2]])))
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+        # Direct memory
+        elif mem.get(cp.pc)[1] == '11':
+            op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
+            not_op = bin(~op_dec_value)[2:].zfill(16)
+            mem.set(not_op, bin2dec(mem.get(cp.pc)[2]))
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+    # SHL op
+    elif mem.get(cp.pc)[0] == '001110':
+        # Register addressing
+        if mem.get(cp.pc)[1] == '01':
+            op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
+            sh_op = bin(op_dec_value << 1)[2:].zfill(16)
+            cp.set(cp.get(regs[mem.get(cp.pc)[2]]), sh_op)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+    # SHR op
+    elif mem.get(cp.pc)[0] == '001111':
+        # Register addressing
+        if mem.get(cp.pc)[1] == '01':
+            op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
+            sh_op = bin(op_dec_value >> 1)[2:].zfill(16)
+            cp.set(cp.get(regs[mem.get(cp.pc)[2]]), sh_op)
+            cp.pc = cp.pc + 1
+            set_zf_sf(a_dec_value)
+
+    # NOP op
+    elif mem.get(cp.pc)[0] == '010000':
+        cp.pc = cp.pc + 1
+
+
+
+
 
 
         # {'HALT': '000001', 'LOAD': '000010', 'STORE': '000011', 'ADD': '000100', 'SUB': '000101', 'INC': '000110',
