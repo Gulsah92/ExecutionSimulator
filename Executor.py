@@ -3,15 +3,15 @@ import CPU
 import sys
 import BinReader
 
-# program_name = sys.argv[0]
-# file_path = sys.argv[1]
+program_name = sys.argv[0]
+file_path = sys.argv[1]
 
 # Instantiate CPU and Memory
 cp = CPU.cpu()
 mem = Memory.Memory()
 
 # Open binary file and get binaries as list
-binaries = BinReader.Binary('test.bin').binl
+binaries = BinReader.Binary(file_path).binl
 
 # Register dictionary to look up char values of registers
 regs = {'0000000000000001': 'a', '0000000000000010': 'b', '0000000000000011': 'c', '0000000000000100': 'd',
