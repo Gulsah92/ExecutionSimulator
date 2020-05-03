@@ -505,9 +505,9 @@ while IsRunning:
         if mem.get(cp.pc)[1] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
             sh_op = bin(op_dec_value >> 1)[2:].zfill(16)
-            cp.set(cp.get(regs[mem.get(cp.pc)[2]]), sh_op)
+            cp.set(regs[mem.get(cp.pc)[2]], sh_op)
             cp.pc = cp.pc + 1
-            set_zf_sf(a_dec_value)
+            set_zf_sf(op_dec_value >> 1)
 
     # NOP op
     elif mem.get(cp.pc)[0] == '010000':
