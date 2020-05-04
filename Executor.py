@@ -671,7 +671,7 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[1] == '00':
-            if cp.cf ^ cp.zf:
+            if not cp.cf:
                 cp.pc = bin2dec(mem.get(cp.pc)[2])
             else:
                 cp.pc = cp.pc + 1
@@ -681,7 +681,7 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[1] == '00':
-            if cp.cf == False and cp.zf == False:
+            if cp.cf:
                 cp.pc = bin2dec(mem.get(cp.pc)[2])
             else:
                 cp.pc = cp.pc + 1
@@ -691,9 +691,7 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[1] == '00':
-            if cp.cf == False and cp.zf == False:
-                cp.pc = bin2dec(mem.get(cp.pc)[2])
-            elif cp.cf == False and cp.zf == True:
+            if cp.cf or cp.zf:
                 cp.pc = bin2dec(mem.get(cp.pc)[2])
             else:
                 cp.pc = cp.pc + 1
