@@ -283,8 +283,6 @@ while IsRunning:
 
     # DEC op
     elif mem.get(cp.pc)[0] == '000111':
-        # print('DEC')
-        # print(cp)
 
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
@@ -469,7 +467,7 @@ while IsRunning:
             not_op = bin(~op_dec_value)[2:].zfill(16)
             cp.set(cp.get(regs[mem.get(cp.pc)[2]]), not_op)
             cp.pc = cp.pc + 1
-            set_zf_sf(a_dec_value)
+            set_zf_sf(op_dec_value)
 
         # Indirect memory
         elif mem.get(cp.pc)[1] == '10':
@@ -477,7 +475,7 @@ while IsRunning:
             not_op = bin(~op_dec_value)[2:].zfill(16)
             mem.set(not_op, bin2dec(cp.get(regs[mem.get(cp.pc)[2]])))
             cp.pc = cp.pc + 1
-            set_zf_sf(a_dec_value)
+            set_zf_sf(op_dec_value)
 
         # Direct memory
         elif mem.get(cp.pc)[1] == '11':
@@ -485,7 +483,7 @@ while IsRunning:
             not_op = bin(~op_dec_value)[2:].zfill(16)
             mem.set(not_op, bin2dec(mem.get(cp.pc)[2]))
             cp.pc = cp.pc + 1
-            set_zf_sf(a_dec_value)
+            set_zf_sf(op_dec_value)
 
     # SHL op
     elif mem.get(cp.pc)[0] == '001110':
@@ -749,15 +747,3 @@ while IsRunning:
     elif mem.get(cp.pc)[0] == '111111':
         cp.pc = cp.pc + 1
 
-        # {'HALT': '000001', 'LOAD': '000010', 'STORE': '000011', 'ADD': '000100', 'SUB': '000101', 'INC': '000110',
-        #  'DEC': '000110', 'MUL': '001000', 'DIV': '001001', 'XOR': '001010', 'AND': '001011', 'OR': '001100',
-        #  'NOT': '001101', 'SHL': '001110', 'SHR': '001111', 'NOP': '010000', 'PUSH': '010001', 'POP': '010010',
-
-        #  'CMP': '010011', 'JMP': '010100', 'JZ': '010101', 'JE': '010101', 'JNZ': '010110', 'JNE': '010110',
-        #  'JC': '010111', 'JNC': '011000', 'JA': '011001', 'JAE': '100000', 'JB': '100001', 'JBE': '100010',
-        #  'READ': '100011', 'PRINT': '100100'}
-
-# print(binaries)
-# print(str(mem)[0:100])
-#
-# print(mem.get(cp.pc))
