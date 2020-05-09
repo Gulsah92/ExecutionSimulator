@@ -19,7 +19,7 @@ class cpu:
         return 'zf=' + str(self.zf) + '\ncf=' + str(self.cf) + '\nsf=' + str(self.sf) + '\npc=' + str(self.pc) + '\na=' + str(self.a) +  '\nb=' + str(self.b) +  '\nc=' + str(self.c) + '\nd=' + str(self.d) + '\ne=' + str(self.e) + '\ns=' + str(self.s)
 
     # Set given value to given register
-    def set(self,register, value):
+    def set(self, register, value):
         if register == 'zf':
             self.zf = value
         elif register == 'cf':

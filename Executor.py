@@ -24,9 +24,32 @@ for inst in binaries:
     ind = ind + 1
 
 
+# for inst in binaries:
+#     mem.set(inst[0:8], ind)
+#     ind = ind + 1
+#     mem.set(inst[8:16], ind)
+#     ind = ind + 1
+#     mem.set(inst[16:], ind)
+#     ind = ind + 1
+
+
 # A function to convert binary represented as string to decimal
 def bin2dec(binary):
-    return int(binary, 2)
+    if binary[0] == '0':
+        return int(binary, 2)
+    elif binary[0] == '1':
+        return int(binary, 2) - 2**16
+
+
+# A function to convert dec to binary
+def dec2bin(dec):
+    if 2**15 > dec >= -(2 ** 15):
+        if dec >= 0:
+            return '0' + bin(dec)[2:].zfill(15)
+        else:
+            return '1' + bin(dec + 2**15)[2:].zfill(15)
+    else:
+        print('Integer overflow!!')
 
 
 # A function to set all CPU flags
@@ -61,11 +84,8 @@ while IsRunning:
 
         # immediate addressing
         if mem.get(cp.pc)[1] == '00':
-            # print(mem.get(cp.pc)[2])
             cp.a = mem.get(cp.pc)[2]
-            # print(cp)
             cp.pc = cp.pc + 1
-            # print(cp)
 
         # Register addressing
         elif mem.get(cp.pc)[1] == '01':
@@ -84,14 +104,11 @@ while IsRunning:
 
     # Store op
     elif mem.get(cp.pc)[0] == '000011':
-        # print('STORE')
-        # print(cp)
 
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
             cp.set(regs[mem.get(cp.pc)[2]], cp.get('a'))
             cp.pc = cp.pc + 1
-            # print(cp)
 
         # Direct memory
         elif mem.get(cp.pc)[1] == '11':
@@ -119,6 +136,7 @@ while IsRunning:
         # Register addressing
         elif mem.get(cp.pc)[1] == '01':
             bin_asc = cp.get(regs[mem.get(cp.pc)[2]])
+            print(bin_asc)
             if bin_asc[0:8] == '00000000':
                 print(chr(bin2dec(bin_asc)))
                 cp.pc = cp.pc + 1
@@ -153,7 +171,7 @@ while IsRunning:
             op_dec_value = bin2dec(mem.get(cp.pc)[2])
             a_dec_value = bin2dec(cp.a)
             a_dec_value = op_dec_value + a_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -162,7 +180,7 @@ while IsRunning:
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
             a_dec_value = int(cp.a, 2)
             a_dec_value = op_dec_value + a_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -171,7 +189,7 @@ while IsRunning:
             op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
             a_dec_value = int(cp.a, 2)
             a_dec_value = op_dec_value + a_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -180,7 +198,7 @@ while IsRunning:
             op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
             a_dec_value = int(cp.a, 2)
             a_dec_value = op_dec_value + a_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -192,7 +210,9 @@ while IsRunning:
             op_dec_value = bin2dec(mem.get(cp.pc)[2])
             a_dec_value = bin2dec(cp.a)
             a_dec_value = a_dec_value - op_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            print(a_dec_value)
+            print(dec2bin(a_dec_value))
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -201,7 +221,7 @@ while IsRunning:
             op_dec_value = bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))
             a_dec_value = int(cp.a, 2)
             a_dec_value = a_dec_value - op_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -210,7 +230,7 @@ while IsRunning:
             op_dec_value = bin2dec(mem.get(bin2dec(cp.get(regs[mem.get(cp.pc)[2]]))))
             a_dec_value = int(cp.a, 2)
             a_dec_value = a_dec_value - op_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -219,7 +239,7 @@ while IsRunning:
             op_dec_value = bin2dec(mem.get(bin2dec(mem.get(cp.pc)[2])))
             a_dec_value = int(cp.a, 2)
             a_dec_value = a_dec_value - op_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
+            cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 1
             set_all_flags(a_dec_value)
 
@@ -269,8 +289,6 @@ while IsRunning:
 
     # INC op
     elif mem.get(cp.pc)[0] == '000110':
-        # print('INC')
-        # print(cp)
 
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
@@ -626,8 +644,6 @@ while IsRunning:
 
     # JNZ op
     elif mem.get(cp.pc)[0] == '010110':
-        # print('JNZ')
-        # print(cp)
 
         # Immediate addressing
         if mem.get(cp.pc)[1] == '00':
@@ -744,4 +760,3 @@ while IsRunning:
     # If Label
     elif mem.get(cp.pc)[0] == '111111':
         cp.pc = cp.pc + 1
-
