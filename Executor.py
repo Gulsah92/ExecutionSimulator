@@ -461,18 +461,8 @@ while IsRunning:
     # NOT op
     elif mem.get(cp.pc)[:6] == '001101':
 
-        # !!!! Burası cok saçma bunu hocaya sormalı
-        # Immediate addressing
-        if mem.get(cp.pc)[6:] == '00':
-            op_dec_value = bin2dec(mem.get_operand(cp.pc))
-            a_dec_value = bin2dec(cp.a)
-            a_dec_value = ~a_dec_value
-            cp.a = bin(a_dec_value)[2:].zfill(16)
-            cp.pc = cp.pc + 3
-            set_zf_sf(a_dec_value)
-
         # Register addressing
-        elif mem.get(cp.pc)[6:] == '01':
+        if mem.get(cp.pc)[6:] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get_operand(cp.pc)]))
             not_op = bin(~op_dec_value)[2:].zfill(16)
             cp.set(cp.get(regs[mem.get_operand(cp.pc)]), not_op)
@@ -752,6 +742,3 @@ while IsRunning:
             mem.set(bin_char, bin2dec(bin2dec(mem.get_operand(cp.pc))))
             cp.pc = cp.pc + 3
 
-    # # If Label
-    # elif mem.get(cp.pc)[:6] == '111111':
-    #     cp.pc = cp.pc + 3
