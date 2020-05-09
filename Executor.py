@@ -701,7 +701,7 @@ while IsRunning:
                 r_char = input()
                 try:
                     # chr(r_char).decode(int(r_char))
-                    bin_char = bin(ord(r_char))[2:].zfill(16)
+                    bin_char = dec2bin(ord(r_char))
                     get_char = False
                 except UnicodeDecodeError:
                     print('Enter an ASCII character!')
@@ -715,7 +715,7 @@ while IsRunning:
                 r_char = input()
                 try:
                     # chr(r_char).decode(int(r_char))
-                    bin_char = bin(ord(chr(r_char)))[2:]  # .zfill(16)
+                    bin_char = dec2bin(ord(r_char))
                     get_char = False
                 except UnicodeDecodeError:
                     print('Enter an ASCII character!')
@@ -729,7 +729,7 @@ while IsRunning:
                 r_char = input('Enter a character: ')
                 try:
                     # chr(r_char).decode(int(r_char))
-                    bin_char = bin(ord(r_char))[2:].zfill(16)
+                    bin_char = dec2bin(ord(r_char))
                     get_char = False
                 except UnicodeDecodeError:
                     print('Enter an ASCII character!')
