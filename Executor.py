@@ -20,12 +20,13 @@ regs = {'0000000000000001': 'a', '0000000000000010': 'b', '0000000000000011': 'c
 # Load instructions and data to memory starting from low address
 ind = 0
 for instruction in binaries:
-    mem.set(instruction[:8], ind)
-    ind = ind + 1
-    mem.set(instruction[8:16], ind)
-    ind = ind + 1
-    mem.set(instruction[16:], ind)
-    ind = ind + 1
+    if instruction[:8] != '11111111':
+        mem.set(instruction[:8], ind)
+        ind = ind + 1
+        mem.set(instruction[8:16], ind)
+        ind = ind + 1
+        mem.set(instruction[16:], ind)
+        ind = ind + 1
 
 
 # A function to convert binary represented as string to decimal
@@ -751,6 +752,6 @@ while IsRunning:
             mem.set(bin_char, bin2dec(bin2dec(mem.get_operand(cp.pc))))
             cp.pc = cp.pc + 3
 
-    # If Label
-    elif mem.get(cp.pc)[:6] == '111111':
-        cp.pc = cp.pc + 3
+    # # If Label
+    # elif mem.get(cp.pc)[:6] == '111111':
+    #     cp.pc = cp.pc + 3
