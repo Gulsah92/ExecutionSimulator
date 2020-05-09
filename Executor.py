@@ -19,18 +19,13 @@ regs = {'0000000000000001': 'a', '0000000000000010': 'b', '0000000000000011': 'c
 
 # Load instructions and data to memory starting from low address
 ind = 0
-for inst in binaries:
-    mem.set(inst, ind)
+for instruction in binaries:
+    mem.set(instruction[:8], ind)
     ind = ind + 1
-
-
-# for inst in binaries:
-#     mem.set(inst[0:8], ind)
-#     ind = ind + 1
-#     mem.set(inst[8:16], ind)
-#     ind = ind + 1
-#     mem.set(inst[16:], ind)
-#     ind = ind + 1
+    mem.set(instruction[8:16], ind)
+    ind = ind + 1
+    mem.set(instruction[16:], ind)
+    ind = ind + 1
 
 
 # A function to convert binary represented as string to decimal
@@ -76,7 +71,7 @@ while IsRunning:
     # print(mem.get(cp.pc))
 
     # Halt op
-    if mem.get(cp.pc)[0] == '000001':
+    if mem.get(cp.pc)[:6] == '000001':
         IsRunning = False
 
     # Load op
@@ -534,19 +529,22 @@ while IsRunning:
 
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
-            data = cp.get(regs[mem.get(cp.pc)[2]])
-            mem.set(data, cp.s)
+            data_l = cp.get(regs[mem.get(cp.pc)[2]])[0:4]
+            data_r = cp.get(regs[mem.get(cp.pc)[2]])[4:]
+            mem.set(data_l, cp.s)
+            mem.set(data_r, cp.s-1)
             cp.pc = cp.pc + 1
-            cp.s = cp.s - 1
+            cp.s = cp.s - 2
 
     # Pop op
     elif mem.get(cp.pc)[0] == '010010':
 
         # Register addressing
         if mem.get(cp.pc)[1] == '01':
-            cp.s = cp.s + 1
-            data = mem.get(cp.s)
-            cp.set(regs[mem.get(cp.pc)[2]], data)
+            cp.s = cp.s + 2
+            data_l = mem.get(cp.s)
+            data_r = mem.get(cp.s-1)
+            cp.set(regs[mem.get(cp.pc)[2]], data_l + data_r)
             cp.pc = cp.pc + 1
 
     # CMP op

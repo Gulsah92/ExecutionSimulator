@@ -12,3 +12,9 @@ class Memory:
 
     def get(self, index):
         return self.mem[index]
+
+    def get_inst(self, pc):
+        return self.get(pc)
+
+    def get_operand(self, pc):
+        return self.get(pc + 1) + self.get(pc + 2)
