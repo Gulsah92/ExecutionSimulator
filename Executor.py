@@ -666,7 +666,7 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[6:] == '00':
-            if not cp.cf:
+            if cp.cf:
                 cp.pc = bin2dec(mem.get_operand(cp.pc))
             else:
                 cp.pc = cp.pc + 3
