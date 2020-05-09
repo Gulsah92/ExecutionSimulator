@@ -27,8 +27,7 @@ class Binary:
         # append every line as string to binl list
         for line in binfile:
             line = line.split('\n')
-            tmpl = [line[0][0:6], line[0][6:8], line[0][8:]]
-            self.binl.append(tmpl)
+            self.binl.append(line[0])
 
         binfile.close()
 
