@@ -516,8 +516,7 @@ while IsRunning:
         if mem.get(cp.pc)[6:8] == '01':
             data_l = cp.get(regs[mem.get_operand(cp.pc)])[0:4]
             data_r = cp.get(regs[mem.get_operand(cp.pc)])[4:]
-            mem.set(data_l, cp.s)
-            mem.set(data_r, cp.s-1)
+            mem.set(data_l + data_r, cp.s-1)
             cp.pc = cp.pc + 3
             cp.s = cp.s - 2
 
@@ -527,9 +526,8 @@ while IsRunning:
         # Register addressing
         if mem.get(cp.pc)[6:8] == '01':
             cp.s = cp.s + 2
-            data_l = mem.get(cp.s)
-            data_r = mem.get(cp.s-1)
-            cp.set(regs[mem.get_operand(cp.pc)], data_l + data_r)
+            data = mem.get(cp.s - 1)
+            cp.set(regs[mem.get_operand(cp.pc)], data)
             cp.pc = cp.pc + 3
 
     # CMP op
