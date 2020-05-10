@@ -705,10 +705,10 @@ while IsRunning:
                 try:
                     # chr(r_char).decode(int(r_char))
                     bin_char = dec2bin(ord(r_char))
+                    cp.set(regs[mem.get_operand(cp.pc)], bin_char)
                     get_char = False
                 except UnicodeDecodeError:
                     print('Enter an ASCII character!')
-            cp.set(regs[mem.get_operand(cp.pc)], bin_char)
             cp.pc = cp.pc + 3
 
         # Indirect memory addressing
@@ -719,10 +719,10 @@ while IsRunning:
                 try:
                     # chr(r_char).decode(int(r_char))
                     bin_char = dec2bin(ord(r_char))
+                    mem.set(bin_char, bin2dec(cp.get(regs[mem.get_operand(cp.pc)])))
                     get_char = False
                 except UnicodeDecodeError:
                     print('Enter an ASCII character!')
-            mem.set(bin_char, bin2dec(cp.get(regs[mem.get_operand(cp.pc)])))
             cp.pc = cp.pc + 3
 
         # Direct memory addressing
@@ -733,9 +733,9 @@ while IsRunning:
                 try:
                     # chr(r_char).decode(int(r_char))
                     bin_char = dec2bin(ord(r_char))
+                    mem.set(bin_char, bin2dec(mem.get_operand(cp.pc)))
                     get_char = False
                 except UnicodeDecodeError:
                     print('Enter an ASCII character!')
-            mem.set(bin_char, bin2dec(mem.get_operand(cp.pc)))
             cp.pc = cp.pc + 3
 
