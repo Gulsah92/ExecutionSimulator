@@ -8,13 +8,16 @@ class Memory:
         return str(self.mem)
 
     def set(self, data, ind):
-        self.mem[ind] = data
+        self.mem[ind] = data[0:8]
+        self.mem[ind + 1] = data[8:]
 
     def get(self, index):
-        return self.mem[index]
+        left_d = self.mem[index]
+        right_d = self.mem[index + 1]
+        return left_d + right_d
 
-    def get_inst(self, pc):
-        return self.get(pc)
+    # def get_inst(self, pc):
+    #     return self.get(pc)
 
     def get_operand(self, pc):
-        return self.get(pc + 1) + self.get(pc + 2)
+        return self.mem[pc + 1] + self.mem[pc + 2]
