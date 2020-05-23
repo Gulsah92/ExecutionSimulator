@@ -88,12 +88,12 @@ while IsRunning:
 
         # Direct memory
         elif mem.get(cp.pc)[6:8] == '11':
-            cp.a = mem.get(int(mem.get_operand(cp.pc), 2))
+            cp.a = mem.get(bin2dec(mem.get_operand(cp.pc)))
             cp.pc = cp.pc + 3
 
         # Indirect memory
         elif mem.get(cp.pc)[6:8] == '10':
-            cp.a = mem.get(cp.get(int(regs[mem.get_operand(cp.pc)], 2)))
+            cp.a = mem.get(bin2dec(cp.get(regs[mem.get_operand(cp.pc)])))
             cp.pc = cp.pc + 3
 
     # Store op
