@@ -20,13 +20,12 @@ regs = {'0000000000000001': 'a', '0000000000000010': 'b', '0000000000000011': 'c
 # Load instructions and data to memory starting from low address
 ind = 0
 for instruction in binaries:
-    if instruction[:8] != '11111111':
-        mem.set(instruction[:8], ind)
-        ind = ind + 1
-        mem.set(instruction[8:16], ind)
-        ind = ind + 1
-        mem.set(instruction[16:], ind)
-        ind = ind + 1
+    mem.set(instruction[:8], ind)
+    ind = ind + 1
+    mem.set(instruction[8:16], ind)
+    ind = ind + 1
+    mem.set(instruction[16:], ind)
+    ind = ind + 1
 
 
 # A function to convert binary represented as string to decimal
@@ -624,7 +623,6 @@ while IsRunning:
 
     # JNZ op
     elif mem.get(cp.pc)[:6] == '010110':
-
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
             if not cp.zf:
