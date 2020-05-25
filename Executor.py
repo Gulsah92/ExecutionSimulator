@@ -120,44 +120,41 @@ while IsRunning:
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
             bin_asc = mem.get_operand(cp.pc)
-            if bin_asc[0:8] == '00000000':
-                print(chr(bin2dec(bin_asc)))
+            if -9 <= bin2dec(bin_asc) <= 9:
+                print(chr(abs(bin2dec(bin_asc)) + 48))
                 cp.pc = cp.pc + 3
             else:
-                print(chr(bin2dec(bin_asc[8:])) + chr(bin2dec(bin_asc[:8])))
+                print(chr(bin2dec(bin_asc)))
                 cp.pc = cp.pc + 3
 
         # Register addressing
         elif mem.get(cp.pc)[6:8] == '01':
             bin_asc = cp.get(regs[mem.get_operand(cp.pc)])
-            if bin_asc[0:8] == '00000000':
-                print(chr(bin2dec(bin_asc)))
+            if -9 <= bin2dec(bin_asc) <= 9:
+                print(chr(abs(bin2dec(bin_asc)) + 48))
                 cp.pc = cp.pc + 3
             else:
-                print(chr(bin2dec(bin_asc[8:])) + chr(bin2dec(bin_asc[:8])))
+                print(chr(bin2dec(bin_asc)))
                 cp.pc = cp.pc + 3
 
         # Indirect memory
         elif mem.get(cp.pc)[6:8] == '10':
             bin_asc = mem.get(bin2dec(cp.get(regs[mem.get_operand(cp.pc)])))
-            if bin_asc[0:8] == '00000000':
-                print(chr(bin2dec(bin_asc)))
+            if -9 <= bin2dec(bin_asc) <= 9:
+                print(chr(abs(bin2dec(bin_asc)) + 48))
                 cp.pc = cp.pc + 3
             else:
-                print(chr(bin2dec(bin_asc[8:])) + chr(bin2dec(bin_asc[:8])))
+                print(chr(bin2dec(bin_asc)))
                 cp.pc = cp.pc + 3
 
         # Direct memory
         elif mem.get(cp.pc)[6:8] == '11':
-            # x = mem.__str__()
-            # print(bin2dec(mem.get_operand(cp.pc)))
-            # print(x[:5000])
             bin_asc = mem.get(bin2dec(mem.get_operand(cp.pc)))
-            if bin_asc[0:8] == '00000000':
-                print(chr(bin2dec(bin_asc)))
+            if -9 <= bin2dec(bin_asc) <= 9:
+                print(chr(abs(bin2dec(bin_asc)) + 48))
                 cp.pc = cp.pc + 3
             else:
-                print(chr(bin2dec(bin_asc[8:])) + chr(bin2dec(bin_asc[:8])))
+                print(chr(bin2dec(bin_asc)))
                 cp.pc = cp.pc + 3
     # ADD op
     elif mem.get(cp.pc)[:6] == '000100':
