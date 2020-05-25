@@ -44,17 +44,25 @@ def dec2bin(dec):
         else:
             return '1' + bin(dec + 2**15)[2:].zfill(15)
     else:
-        print('Integer overflow!!')
+        return '1' * 16
 
 
 # A function to set all CPU flags
 def set_all_flags(value):
     if value == 0:
         cp.zf = True
+    else:
+        cp.zf = False
+
     if value < 0:
         cp.sf = True
+    else:
+        cp.sf = False
+
     if value > 65535:
         cp.cf = True
+    else:
+        cp.cf = False
 
 
 # A function to set SF and ZF CPU flags
@@ -197,8 +205,6 @@ while IsRunning:
 
     # SUB op
     elif mem.get(cp.pc)[:6] == '000101':
-        print(cp)
-
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
             op_dec_value = bin2dec(mem.get_operand(cp.pc))
@@ -245,7 +251,7 @@ while IsRunning:
             a_dec_value = op_dec_value * a_dec_value
             cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 3
-            set_all_flags(a_dec_value)
+            set_zf_sf(a_dec_value)
 
         # Register addressing
         elif mem.get(cp.pc)[6:8] == '01':
@@ -254,7 +260,7 @@ while IsRunning:
             a_dec_value = op_dec_value * a_dec_value
             cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 3
-            set_all_flags(a_dec_value)
+            set_zf_sf(a_dec_value)
 
         # Indirect memory
         elif mem.get(cp.pc)[6:8] == '10':
@@ -263,7 +269,7 @@ while IsRunning:
             a_dec_value = op_dec_value * a_dec_value
             cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 3
-            set_all_flags(a_dec_value)
+            set_zf_sf(a_dec_value)
 
         # Direct memory
         elif mem.get(cp.pc)[6:8] == '11':
@@ -272,11 +278,10 @@ while IsRunning:
             a_dec_value = op_dec_value * a_dec_value
             cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 3
-            set_all_flags(a_dec_value)
+            set_zf_sf(a_dec_value)
 
     # INC op
     elif mem.get(cp.pc)[:6] == '000110':
-        print(cp)
         # Register addressing
         if mem.get(cp.pc)[6:8] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get_operand(cp.pc)]))
@@ -288,7 +293,6 @@ while IsRunning:
 
     # DEC op
     elif mem.get(cp.pc)[:6] == '000111':
-
         # Register addressing
         if mem.get(cp.pc)[6:8] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get_operand(cp.pc)]))
@@ -308,7 +312,7 @@ while IsRunning:
             a_dec_value = a_dec_value // op_dec_value
             cp.a = dec2bin(a_dec_value)
             cp.pc = cp.pc + 3
-            set_all_flags(a_dec_value)
+            set_zf_sf(a_dec_value)
 
         # Register addressing
         elif mem.get(cp.pc)[6:8] == '01':
@@ -529,7 +533,6 @@ while IsRunning:
 
     # CMP op
     elif mem.get(cp.pc)[:6] == '010011':
-
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
             dec_op = bin2dec(mem.get_operand(cp.pc))
@@ -609,9 +612,8 @@ while IsRunning:
         if mem.get(cp.pc)[6:8] == '00':
             cp.pc = bin2dec(mem.get_operand(cp.pc))
 
-    # JZ op
+    # JZ and JE op
     elif mem.get(cp.pc)[:6] == '010101':
-
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
             if cp.zf:
@@ -629,7 +631,7 @@ while IsRunning:
                 cp.pc = cp.pc + 3
 
     # JC op
-    elif mem.get(cp.pc)[:6] == '010101':
+    elif mem.get(cp.pc)[:6] == '010111':
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
@@ -639,7 +641,7 @@ while IsRunning:
                 cp.pc = cp.pc + 3
 
     # JNC op
-    elif mem.get(cp.pc)[:6] == '010101':
+    elif mem.get(cp.pc)[:6] == '011000':
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
@@ -663,7 +665,6 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
-            print(cp)
             if cp.cf or cp.zf:
                 cp.pc = bin2dec(mem.get_operand(cp.pc))
             else:
@@ -691,7 +692,6 @@ while IsRunning:
 
     # READ
     elif mem.get(cp.pc)[:6] == '100011':
-
         # Register addressing
         if mem.get(cp.pc)[6:8] == '01':
             get_char = True
@@ -707,7 +707,7 @@ while IsRunning:
             cp.pc = cp.pc + 3
 
         # Indirect memory addressing
-        if mem.get(cp.pc)[6:8] == '10':
+        elif mem.get(cp.pc)[6:8] == '10':
             get_char = True
             while get_char:
                 r_char = input()
@@ -721,7 +721,7 @@ while IsRunning:
             cp.pc = cp.pc + 3
 
         # Direct memory addressing
-        if mem.get(cp.pc)[6:8] == '11':
+        elif mem.get(cp.pc)[6:8] == '11':
             get_char = True
             while get_char:
                 r_char = input('Enter a character: ')
