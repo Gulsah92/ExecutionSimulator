@@ -197,6 +197,7 @@ while IsRunning:
 
     # SUB op
     elif mem.get(cp.pc)[:6] == '000101':
+        print(cp)
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
@@ -275,7 +276,7 @@ while IsRunning:
 
     # INC op
     elif mem.get(cp.pc)[:6] == '000110':
-
+        print(cp)
         # Register addressing
         if mem.get(cp.pc)[6:8] == '01':
             op_dec_value = bin2dec(cp.get(regs[mem.get_operand(cp.pc)]))
@@ -652,7 +653,7 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
-            if not cp.cf:
+            if cp.cf:
                 cp.pc = bin2dec(mem.get_operand(cp.pc))
             else:
                 cp.pc = cp.pc + 3
@@ -662,7 +663,8 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
-            if cp.cf:
+            print(cp)
+            if cp.cf or cp.zf:
                 cp.pc = bin2dec(mem.get_operand(cp.pc))
             else:
                 cp.pc = cp.pc + 3
@@ -672,7 +674,7 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
-            if cp.cf:
+            if not cp.cf:
                 cp.pc = bin2dec(mem.get_operand(cp.pc))
             else:
                 cp.pc = cp.pc + 3
@@ -682,7 +684,7 @@ while IsRunning:
 
         # Immediate addressing
         if mem.get(cp.pc)[6:8] == '00':
-            if cp.cf or cp.zf:
+            if not cp.cf or cp.zf:
                 cp.pc = bin2dec(mem.get_operand(cp.pc))
             else:
                 cp.pc = cp.pc + 3
