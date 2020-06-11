@@ -131,9 +131,11 @@ while IsRunning:
             if -9 <= bin2dec(bin_asc) <= 9:
                 print(chr(abs(bin2dec(bin_asc)) + 48))
                 cp.pc = cp.pc + 3
-            else:
+            elif 9 < bin2dec(bin_asc) < 128:
                 print(chr(bin2dec(bin_asc)))
                 cp.pc = cp.pc + 3
+            else:
+                print('Character out of range!')
 
         # Register addressing
         elif mem.get(cp.pc)[6:8] == '01':
